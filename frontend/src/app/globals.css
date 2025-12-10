@@ -1,0 +1,29 @@
+:root {
+    color: #0f172a;
+    background: #f5f7fb;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    max-width: 100vw;
+    overflow-x: hidden;
+}
+
+body {
+    margin: 0;
+    background: radial-gradient(circle at 20% 20%, #e8f0ff, transparent 35%),
+        radial-gradient(circle at 80% 0%, #ffe7d6, transparent 25%),
+        #f5f7fb;
+    color: #0f172a;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
