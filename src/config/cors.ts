@@ -24,6 +24,8 @@ export const corsOptions: CorsOptions = {
         'http://localhost:5173',
         // Keycloak
         'http://localhost:8880',
+        // Next.js devserver (http)
+        'http://localhost:3001',
         'https://studio.apollographql.com',
         'https://localhost:3001',
     ],

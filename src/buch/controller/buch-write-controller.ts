@@ -62,7 +62,8 @@ import {
     BuchUpdate,
     BuchWriteService,
 } from '../service/buch-write-service.js';
-import { BuchDTO, BuchDtoOhneRef } from './buch-dto.js';
+import { BuchDTO } from './buch-dto.js';
+import { BuchUpdateDTO } from './buch-update-dto.js';
 import { createBaseUri } from './create-base-uri.js';
 import { InvalidMimeTypeException } from './exceptions.js';
 
@@ -248,7 +249,7 @@ export class BuchWriteController {
     })
     @ApiForbiddenResponse({ description: MSG_FORBIDDEN })
     async put(
-        @Body() buchDTO: BuchDtoOhneRef,
+        @Body() buchDTO: BuchUpdateDTO,
         @Param(
             'id',
             new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_FOUND }),
@@ -332,19 +333,75 @@ export class BuchWriteController {
         return buch;
     }
 
-    #buchDtoToBuchUpdate(buchDTO: BuchDtoOhneRef): BuchUpdate {
-        return {
-            version: 0,
-            isbn: buchDTO.isbn,
-            rating: buchDTO.rating,
-            art: buchDTO.art ?? null,
-            preis: buchDTO.preis.toNumber(),
-            rabatt: buchDTO.rabatt?.toNumber() ?? 0,
-            lieferbar: buchDTO.lieferbar ?? false,
-            datum: buchDTO.datum ?? null,
-            homepage: buchDTO.homepage ?? null,
-            schlagwoerter: buchDTO.schlagwoerter ?? [],
+    #buchDtoToBuchUpdate(buchDTO: BuchUpdateDTO): BuchUpdate {
+        const buch: BuchUpdate = {};
+
+        const toNumber = (value: unknown) => {
+            if (value === undefined || value === null) {
+                return undefined;
+            }
+            if (typeof value === 'number') {
+                return value;
+            }
+            if (
+                typeof value === 'object' &&
+                value !== null &&
+                'toNumber' in value &&
+                typeof (value as { toNumber: () => number }).toNumber ===
+                    'function'
+            ) {
+                return (value as { toNumber: () => number }).toNumber();
+            }
+            const parsed = Number(value);
+            return Number.isNaN(parsed) ? undefined : parsed;
         };
+
+        if (buchDTO.isbn !== undefined && buchDTO.isbn.trim() !== '') {
+            buch.isbn = buchDTO.isbn;
+        }
+        if (buchDTO.rating !== undefined) {
+            buch.rating = buchDTO.rating;
+        }
+        if (buchDTO.art !== undefined) {
+            buch.art = buchDTO.art ?? null;
+        }
+        if (buchDTO.preis !== undefined) {
+            const preisNum = toNumber(buchDTO.preis);
+            if (preisNum !== undefined) {
+                buch.preis = preisNum;
+            }
+        }
+        if (buchDTO.rabatt !== undefined) {
+            const rabattNum = toNumber(buchDTO.rabatt);
+            if (rabattNum !== undefined) {
+                buch.rabatt = rabattNum;
+            }
+        }
+        if (buchDTO.lieferbar !== undefined) {
+            buch.lieferbar = buchDTO.lieferbar ?? false;
+        }
+        if (buchDTO.datum !== undefined) {
+            buch.datum = buchDTO.datum ?? null;
+        }
+        if (buchDTO.homepage !== undefined && buchDTO.homepage !== '') {
+            buch.homepage = buchDTO.homepage ?? null;
+        }
+        if (buchDTO.schlagwoerter !== undefined) {
+            buch.schlagwoerter = buchDTO.schlagwoerter ?? [];
+        }
+        if (buchDTO.titel !== undefined) {
+            const titelUpdate: Record<string, string | null> = {};
+            if (buchDTO.titel.titel !== undefined) {
+                titelUpdate['titel'] = buchDTO.titel.titel;
+            }
+            if (buchDTO.titel.untertitel !== undefined) {
+                titelUpdate['untertitel'] = buchDTO.titel.untertitel ?? null;
+            }
+            if (Object.keys(titelUpdate).length > 0) {
+                buch.titel = { update: titelUpdate };
+            }
+        }
+        return buch;
     }
 }
 /* eslint-enable max-lines */

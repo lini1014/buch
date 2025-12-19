@@ -25,7 +25,7 @@
 #               curl --tlsv1.3 --http2 --verbose --insecure https://buch:3000/rest/1
 #               curl --tlsv1.3 --http2 --verbose --insecure --data 'username=admin&password=p' --header 'Content-Type: application/x-www-form-urlencoded' https://buch:3000/auth/token
 #               curl --verbose http://keycloak:8080/realms/nest/.well-known/openid-configuration
-#               curl --verbose --data 'username=admin&password=p&grant_type=password&client_id=nest-client&client_secret=0eoZjeaIa0SdAIdTwMRQofJ82ne3afUl' --header 'Content-Type: application/x-www-form-urlencoded' http://keycloak:8080/realms/nest/protocol/openid-connect/token
+#               curl --verbose --data 'username=admin&password=p&grant_type=password&client_id=nest-client&client_secret=smtuMu8gHdQpte3HxL8eXGDtP0WTCgnH' --header 'Content-Type: application/x-www-form-urlencoded' http://keycloak:8080/realms/nest/protocol/openid-connect/token
 #
 #               ip addr
 #               ifconfig
