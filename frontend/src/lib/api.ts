@@ -64,3 +64,61 @@ async function request<T>(path: string, init?: RequestConfig): Promise<T> {
     }
     return JSON.parse(text) as T;
 }
+export const bookApi = {
+    list: async (params?: ListParams, token?: string) => {
+        const url = buildUrl('/rest', {
+            titel: params?.titel,
+            lieferbar: params?.lieferbar,
+            art: params?.art,
+            javascript: params?.javascript,
+            typescript: params?.typescript,
+            java: params?.java,
+            python: params?.python,
+            page: params?.page,
+            size: params?.size,
+        });
+        return request<Page<Buch>>(url, { token });
+    },
+    get: async (id: number, token?: string) => {
+        const url = buildUrl(`/rest/${id}`);
+        return request<Buch>(url, { token });
+    },
+    create: async (payload: unknown, token?: string) => {
+        const url = buildUrl('/rest');
+        return request<Buch>(url, {
+            method: 'POST',
+            token,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+        });
+    },
+    update: async (
+        id: number,
+        payload: unknown,
+        token?: string,
+        version?: string | number,
+    ) => {
+        const url = buildUrl(`/rest/${id}`);
+        let ifMatch: string | undefined;
+        if (version !== undefined) {
+            const vStr = String(version);
+            ifMatch = vStr.startsWith('"') ? vStr : `"${vStr}"`;
+        }
+        return request<Buch>(url, {
+            method: 'PUT',
+            token,
+            headers: {
+                'Content-Type': 'application/json',
+                ...(ifMatch !== undefined ? { 'If-Match': ifMatch } : {}),
+            },
+            body: JSON.stringify(payload),
+        });
+    },
+    remove: async (id: number, token?: string) => {
+        const url = buildUrl(`/rest/${id}`);
+        return request<void>(url, {
+            method: 'DELETE',
+            token,
+        });
+    },
+};
