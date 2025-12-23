@@ -127,3 +127,11 @@ export const AuthProvider = ({ children }: { readonly children: ReactNode }) => 
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
+
+export const useAuth = () => {
+    const ctx = useContext(AuthContext);
+    if (ctx === undefined) {
+        throw new Error('useAuth muss innerhalb von AuthProvider verwendet werden');
+    }
+    return ctx;
+};
