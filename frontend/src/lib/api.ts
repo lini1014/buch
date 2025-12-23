@@ -56,3 +56,11 @@ async function request<T>(path: string, init?: RequestConfig): Promise<T> {
         );
     }
 
+   // Bei 204 oder leerem Body nicht parsen
+    const text = await res.text();
+    if (!text) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        return undefined as T;
+    }
+    return JSON.parse(text) as T;
+}
