@@ -10,11 +10,15 @@ export function ThemeToggle({ isLight, onToggle }: Props) {
         <FormControlLabel
             control={
                 <Switch
+                    key="theme-toggle"
                     checked={isLight}
                     onChange={(e) => onToggle(e.target.checked)}
                 />
             }
-            label="Theme"
+            label={isLight ? 'Light' : 'Dark'}
+            sx={{
+                color: isLight ? '#333' : '#c7c7c7',
+            }}
         />
     );
 }
