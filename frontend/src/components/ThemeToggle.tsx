@@ -6,5 +6,15 @@ type Props = {
 };
 
 export function ThemeToggle({ isLight, onToggle }: Props) {
-    return <FormControlLabel control={<Switch />} label="Theme" />;
+    return (
+        <FormControlLabel
+            control={
+                <Switch
+                    checked={isLight}
+                    onChange={(e) => onToggle(e.target.checked)}
+                />
+            }
+            label="Theme"
+        />
+    );
 }
