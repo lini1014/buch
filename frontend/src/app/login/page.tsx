@@ -195,6 +195,50 @@ export default function LoginPage() {
                 </Card>
             </Container>
 
-    
+            {/* Dekorative Icons unten rechts */}
+            <Box
+                sx={{
+                    position: 'absolute',
+                    right: 18,
+                    bottom: 16,
+                    display: 'flex',
+                    gap: 1,
+                    opacity: 0.7,
+                }}
+            >
+                {[1, 2, 3, 4].map((key) => (
+                    <Box
+                        // eslint-disable-next-line react/no-array-index-key
+                        key={key}
+                        sx={{
+                            width: 32,
+                            height: 24,
+                            bgcolor: '#2d2d2d',
+                            borderRadius: '4px',
+                            border: '1px solid #4a4a4a',
+                        }}
+                    />
+                ))}
+            </Box>
+            {/* Theme Switch */}
+            <Box
+                sx={{
+                    position: 'absolute',
+                    bottom: 16,
+                    left: 16,
+                }}
+            >
+                <FormControlLabel
+                    control={
+                        <Switch
+                            checked={isLight}
+                            onChange={(e) => setIsLight(e.target.checked)}
+                        />
+                    }
+                    label={isLight ? 'Light' : 'Dark'}
+                    sx={{ color: isLight ? '#333' : '#c7c7c7' }}
+                />
+            </Box>
+        </Box>
     );
 }
