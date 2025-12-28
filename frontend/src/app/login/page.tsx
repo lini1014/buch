@@ -174,5 +174,67 @@ export default function Home() {
                         error={adminError}
                     />
                 )}
+            </Box>
 
+            <Stack spacing={2} sx={{ mt: 3 }}>
+                {state.status === 'loading' && (
+                    <Stack
+                        direction="row"
+                        alignItems="center"
+                        spacing={2}
+                        sx={{ justifyContent: 'center', py: 3 }}
+                    >
+                        <CircularProgress />
+                        <Typography color="text.secondary">
+                            Bücher werden geladen...
+                        </Typography>
+                    </Stack>
+                )}
+
+                {state.status === 'error' && (
+                    <Alert severity="error">{state.message}</Alert>
+                )}
+
+                {state.status === 'success' && books.length === 0 && (
+                    <Alert severity="info">
+                        Keine Bücher gefunden. Probiere eine andere Suche.
+                    </Alert>
+                )}
+
+                {state.status === 'success' && books.length > 0 && (
+                    <BookGrid books={books} />
+                )}
+
+                {state.status === 'success' && totalPages > 1 && (
+                    <PaginationBar
+                        page={page}
+                        totalPages={totalPages}
+                        loading={state.status === 'loading'}
+                        isLight={isLight}
+                        onPrev={() => {
+                            if (page > 0) {
+                                setPage(page - 1);
+                            }
+                        }}
+                        onNext={() => {
+                            if (page + 1 < totalPages) {
+                                setPage(page + 1);
+                            }
+                        }}
+                    />
+                )}
+            </Stack>
+
+            <AdminDialog
+                open={dialogOpen}
+                mode={adminMode}
+                form={adminForm}
+                onChange={setAdminForm}
+                onClose={closeDialog}
+                onCreate={handleCreate}
+                onUpdate={handleUpdate}
+                onDelete={handleDelete}
+            />
+        </Box>
+    );
 }
