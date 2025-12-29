@@ -1,5 +1,6 @@
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
-import { IconButton, Menu } from '@mui/material';
+import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
+import { Box, Button, IconButton, Menu, Typography } from '@mui/material';
 import { useState } from 'react';
 
 type Props = {
@@ -7,7 +8,7 @@ type Props = {
     onLogout: () => void;
 };
 
-export function UserMenu({}: Props) {
+export function UserMenu({ username, onLogout }: Props) {
     const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
 
     return (
@@ -32,7 +33,28 @@ export function UserMenu({}: Props) {
                 onClose={() => setMenuAnchor(null)}
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                 transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-            />
+                PaperProps={{
+                    sx: { minWidth: 200, bgcolor: '#2d2d2d', color: '#f5f5f5' },
+                }}
+            >
+                <Box sx={{ px: 2, py: 1.5, display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <PersonOutlineRoundedIcon />
+                    <Typography variant="body1" sx={{ fontWeight: 600 }}>
+                        {username ?? 'Unbekannt'}
+                    </Typography>
+                </Box>
+
+                <Button
+                    fullWidth
+                    onClick={() => {
+                        setMenuAnchor(null);
+                        onLogout();
+                    }}
+                    sx={{ justifyContent: 'flex-start', color: '#f5f5f5', px: 2 }}
+                >
+                    Log-out
+                </Button>
+            </Menu>
         </>
     );
 }
