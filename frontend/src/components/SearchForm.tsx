@@ -1,7 +1,10 @@
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import {
+  Button,
+  Checkbox,
   FormControl,
   FormControlLabel,
+  FormLabel,
   InputLabel,
   MenuItem,
   Select,
@@ -9,15 +12,19 @@ import {
   Switch,
   TextField,
 } from '@mui/material';
+import type { TagState } from '../lib/useBookSearch';
 
 type Props = {
     query: string;
     art: string | undefined;
     lieferbarOnly: boolean;
+    tags: TagState;
     loading: boolean;
     onQueryChange: (value: string) => void;
     onArtChange: (value: string | undefined) => void;
     onLieferbarChange: (value: boolean) => void;
+    onTagToggle: (tag: keyof TagState, checked: boolean) => void;
+    onReset: () => void;
     onSearch: () => void;
 };
 
@@ -25,10 +32,13 @@ export function SearchForm({
     query,
     art,
     lieferbarOnly,
+    tags,
     loading,
     onQueryChange,
     onArtChange,
     onLieferbarChange,
+    onTagToggle,
+    onReset,
     onSearch,
 }: Props) {
     return (
@@ -78,6 +88,40 @@ export function SearchForm({
                     }
                     label="Nur lieferbar"
                 />
+
+                <FormControl component="fieldset">
+                    <FormLabel component="legend">Technologien</FormLabel>
+                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} flexWrap="wrap">
+                        {(['javascript', 'typescript', 'java', 'python'] as const).map((tag) => (
+                            <FormControlLabel
+                                key={tag}
+                                control={
+                                    <Checkbox
+                                        checked={tags[tag]}
+                                        onChange={(event) =>
+                                            onTagToggle(tag, event.target.checked)
+                                        }
+                                    />
+                                }
+                                label={tag}
+                            />
+                        ))}
+                    </Stack>
+                </FormControl>
+
+                <Stack direction="row" spacing={2} justifyContent="flex-end">
+                    <Button variant="outlined" onClick={onReset} disabled={loading}>
+                        Reset
+                    </Button>
+                    <Button
+                        type="submit"
+                        variant="contained"
+                        startIcon={<SearchRoundedIcon />}
+                        disabled={loading}
+                    >
+                        Suchen
+                    </Button>
+                </Stack>
             </Stack>
         </form>
     );
