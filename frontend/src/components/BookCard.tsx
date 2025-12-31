@@ -1,4 +1,12 @@
-import { Card, CardContent, Chip, Stack, Typography } from '@mui/material';
+import {
+  Card,
+  CardContent,
+  Chip,
+  Divider,
+  Rating,
+  Stack,
+  Typography,
+} from '@mui/material';
 import type { Buch } from '../lib/types';
 
 type Props = {
@@ -14,13 +22,15 @@ export function BookCard({ book }: Props) {
                 flexDirection: 'column',
             }}
         >
-            <CardContent>
-                <Stack
-                    direction="row"
-                    alignItems="center"
-                    spacing={1}
-                    justifyContent="space-between"
-                >
+            <CardContent
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 1.5,
+                    height: '100%',
+                }}
+            >
+                <Stack direction="row" alignItems="center" spacing={1} justifyContent="space-between">
                     <Stack spacing={0.5}>
                         <Typography variant="h6">
                             {book.titel?.titel ?? '—'}
@@ -29,13 +39,35 @@ export function BookCard({ book }: Props) {
                             {book.titel?.untertitel ?? ''}
                         </Typography>
                     </Stack>
-
                     <Chip
                         label={book.art ?? 'Unbekannt'}
                         color="primary"
                         size="small"
                         variant="outlined"
                     />
+                </Stack>
+
+                <Stack direction="row" alignItems="center" spacing={1}>
+                    <Rating value={book.rating} precision={0.5} readOnly size="small" />
+                    <Typography variant="body2" color="text.secondary">
+                        ISBN {book.isbn}
+                    </Typography>
+                </Stack>
+
+                <Divider />
+
+                <Stack spacing={0.5}>
+                    <Typography variant="body2">
+                        Preis:{' '}
+                        <strong>
+                            {book.preis !== undefined && book.preis !== null
+                                ? `${book.preis} €`
+                                : 'n/a'}
+                        </strong>
+                    </Typography>
+                    <Typography variant="body2">
+                        Lieferbar: <strong>{book.lieferbar ? 'Ja' : 'Nein'}</strong>
+                    </Typography>
                 </Stack>
             </CardContent>
         </Card>
