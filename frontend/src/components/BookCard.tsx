@@ -1,4 +1,6 @@
 import {
+  Box,
+  Button,
   Card,
   CardContent,
   Chip,
@@ -7,6 +9,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
+import Link from 'next/link';
 import type { Buch } from '../lib/types';
 
 type Props = {
@@ -68,6 +71,32 @@ export function BookCard({ book }: Props) {
                     <Typography variant="body2">
                         Lieferbar: <strong>{book.lieferbar ? 'Ja' : 'Nein'}</strong>
                     </Typography>
+
+                    {book.schlagwoerter && book.schlagwoerter.length > 0 && (
+                        <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                            {book.schlagwoerter.map((tag) => (
+                                <Chip
+                                    key={`${book.id}-${tag}`}
+                                    label={tag}
+                                    size="small"
+                                    color="secondary"
+                                    variant="filled"
+                                />
+                            ))}
+                        </Stack>
+                    )}
+
+                    <Box sx={{ flexGrow: 1 }} />
+
+                    <Button
+                        component={Link}
+                        href={`/books/${book.id}`}
+                        variant="outlined"
+                        size="small"
+                        sx={{ alignSelf: 'flex-start', mt: 1 }}
+                    >
+                        Details
+                    </Button>
                 </Stack>
             </CardContent>
         </Card>
