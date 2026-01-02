@@ -1,10 +1,12 @@
 import { Box } from '@mui/material';
+import type { Buch } from '../lib/types';
+import { BookCard } from './BookCard';
 
 type Props = {
-    books: unknown[];
+    books: Buch[];
 };
 
-export function BookGrid({ }: Props) {
+export function BookGrid({ books }: Props) {
     return (
         <Box
             sx={{
@@ -15,7 +17,9 @@ export function BookGrid({ }: Props) {
                 justifyContent: 'center',
             }}
         >
-            {/* BookCards folgen */}
+            {books.map((book) => (
+                <BookCard key={book.id} book={book} />
+            ))}
         </Box>
     );
 }
