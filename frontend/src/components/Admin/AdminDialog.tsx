@@ -12,10 +12,15 @@ type Props = {
     onDelete: () => void;
 };
 
-export function AdminDialog({ open, onClose }: Props) {
+export function AdminDialog({ open, mode, onClose }: Props) {
+    const isUpdate = mode === 'update';
+    const isCreate = mode === 'create';
+
     return (
         <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
-            <DialogTitle>Admin</DialogTitle>
+            <DialogTitle>
+                {isCreate ? 'Buch anlegen' : isUpdate ? 'Buch ändern' : 'Buch löschen'}
+            </DialogTitle>
             <DialogContent dividers>{/* Inhalt folgt */}</DialogContent>
         </Dialog>
     );
