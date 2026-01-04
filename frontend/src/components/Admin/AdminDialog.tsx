@@ -1,5 +1,7 @@
 import {
+  Button,
   Dialog,
+  DialogActions,
   DialogContent,
   DialogTitle,
   FormControl,
@@ -24,7 +26,16 @@ type Props = {
     onDelete: () => void;
 };
 
-export function AdminDialog({ open, mode, form, onChange, onClose }: Props) {
+export function AdminDialog({
+    open,
+    mode,
+    form,
+    onChange,
+    onClose,
+    onCreate,
+    onUpdate,
+    onDelete,
+}: Props) {
     const isUpdate = mode === 'update';
     const isDelete = mode === 'delete';
     const isCreate = mode === 'create';
@@ -48,7 +59,6 @@ export function AdminDialog({ open, mode, form, onChange, onClose }: Props) {
                             }
                         />
                     )}
-
                     {(isCreate || isUpdate) && (
                         <>
                             <TextField
@@ -152,6 +162,43 @@ export function AdminDialog({ open, mode, form, onChange, onClose }: Props) {
                     )}
                 </Stack>
             </DialogContent>
+            <DialogActions>
+                <Button onClick={onClose}>Schließen</Button>
+                {isCreate && (
+                    <Button
+                        variant="contained"
+                        onClick={() => {
+                            onCreate();
+                            onClose();
+                        }}
+                    >
+                        Anlegen
+                    </Button>
+                )}
+                {isUpdate && (
+                    <Button
+                        variant="contained"
+                        onClick={() => {
+                            onUpdate();
+                            onClose();
+                        }}
+                    >
+                        Ändern
+                    </Button>
+                )}
+                {isDelete && (
+                    <Button
+                        color="error"
+                        variant="contained"
+                        onClick={() => {
+                            onDelete();
+                            onClose();
+                        }}
+                    >
+                        Löschen
+                    </Button>
+                )}
+            </DialogActions>
         </Dialog>
     );
 }
