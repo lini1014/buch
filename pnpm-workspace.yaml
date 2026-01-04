@@ -35,3 +35,8 @@ saveExact: true
 
 # https://pnpm.io/settings#saveprefix
 savePrefix: ""
+
+# Workspace-Projekte
+packages:
+  - "."
+  - "frontend"
