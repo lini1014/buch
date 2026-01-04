@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, DialogTitle } from '@mui/material';
+import { Dialog, DialogContent, DialogTitle, Stack, TextField } from '@mui/material';
 import type { AdminForm, AdminMode } from '../../lib/useAdminActions';
 
 type Props = {
@@ -12,8 +12,9 @@ type Props = {
     onDelete: () => void;
 };
 
-export function AdminDialog({ open, mode, onClose }: Props) {
+export function AdminDialog({ open, mode, form, onChange, onClose }: Props) {
     const isUpdate = mode === 'update';
+    const isDelete = mode === 'delete';
     const isCreate = mode === 'create';
 
     return (
@@ -21,7 +22,22 @@ export function AdminDialog({ open, mode, onClose }: Props) {
             <DialogTitle>
                 {isCreate ? 'Buch anlegen' : isUpdate ? 'Buch ändern' : 'Buch löschen'}
             </DialogTitle>
-            <DialogContent dividers>{/* Inhalt folgt */}</DialogContent>
+            <DialogContent dividers>
+                <Stack spacing={2} sx={{ mt: 1 }}>
+                    {(isUpdate || isDelete) && (
+                        <TextField
+                            label="ID"
+                            value={form.id}
+                            onChange={(e) =>
+                                onChange((prev) => ({
+                                    ...prev,
+                                    id: e.target.value,
+                                }))
+                            }
+                        />
+                    )}
+                </Stack>
+            </DialogContent>
         </Dialog>
     );
 }
