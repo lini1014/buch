@@ -125,7 +125,7 @@ export default async function BookDetail({ params }: Props) {
                             <DetailRow
                                 label="Preis"
                                 value={
-                                    book.preis ?? book.preis === 0
+                                    book.preis !== undefined && book.preis !== null
                                         ? `${book.preis} €`
                                         : '—'
                                 }
@@ -133,7 +133,7 @@ export default async function BookDetail({ params }: Props) {
                             <DetailRow
                                 label="Rabatt"
                                 value={
-                                    book.rabatt ?? book.rabatt === 0
+                                    book.rabatt !== undefined && book.rabatt !== null
                                         ? `${(Number(book.rabatt) * 100).toFixed(1)} %`
                                         : '—'
                                 }
