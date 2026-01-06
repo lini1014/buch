@@ -12,6 +12,7 @@ export type AdminForm = {
     preis: string;
     art: string;
     lieferbar: boolean;
+    schlagwoerter: string[];
     version: string;
 };
 
@@ -24,6 +25,7 @@ const defaultForm: AdminForm = {
     preis: '',
     art: '',
     lieferbar: false,
+    schlagwoerter: [],
     version: '',
 };
 
@@ -54,6 +56,13 @@ export function useAdminActions(token: string | undefined, loadBooks: () => Prom
             if (!Number.isNaN(preisNum)) {
                 payload.preis = preisNum;
             }
+        }
+        const schlagwoerterList = adminForm.schlagwoerter
+            .map((tag) => tag.trim())
+            .filter((tag) => tag.length > 0)
+            .map((tag) => tag.toUpperCase());
+        if (schlagwoerterList.length > 0) {
+            payload.schlagwoerter = schlagwoerterList;
         }
         payload.lieferbar = adminForm.lieferbar;
 

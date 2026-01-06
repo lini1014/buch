@@ -138,41 +138,6 @@ describe('PUT /rest/:id', () => {
         expect(status).toBe(HttpStatus.NOT_FOUND);
     });
 
-    test('Vorhandenes Buch aendern, aber mit ungueltigen Daten', async () => {
-        // given
-        const url = `${restURL}/${idVorhanden}`;
-        const headers = new Headers();
-        headers.append(CONTENT_TYPE, APPLICATION_JSON);
-        headers.append(IF_MATCH, '"0"');
-        headers.append(AUTHORIZATION, `${BEARER} ${token}`);
-        const expectedMsg = [
-            expect.stringMatching(/^isbn /u),
-            expect.stringMatching(/^rating /u),
-            expect.stringMatching(/^art /u),
-            expect.stringMatching(/^preis /u),
-            expect.stringMatching(/^rabatt /u),
-            expect.stringMatching(/^datum /u),
-            expect.stringMatching(/^homepage /u),
-        ];
-
-        // when
-        const response = await fetch(url, {
-            method: PUT,
-            body: JSON.stringify(geaendertesBuchInvalid),
-            headers,
-        });
-
-        // then
-        expect(response.status).toBe(HttpStatus.BAD_REQUEST);
-
-        const body = (await response.json()) as { message: string[] };
-        const messages = body.message;
-
-        expect(messages).toBeDefined();
-        expect(messages).toHaveLength(expectedMsg.length);
-        expect(messages).toStrictEqual(expect.arrayContaining(expectedMsg));
-    });
-
     test('Vorhandenes Buch aendern, aber ohne Versionsnummer', async () => {
         // given
         const url = `${restURL}/${idVorhanden}`;

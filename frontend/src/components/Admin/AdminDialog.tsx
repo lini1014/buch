@@ -1,5 +1,6 @@
 import {
   Button,
+  Checkbox,
   Dialog,
   DialogActions,
   DialogContent,
@@ -14,6 +15,8 @@ import {
   TextField,
 } from '@mui/material';
 import type { AdminForm, AdminMode } from '../../lib/useAdminActions';
+
+const TAG_OPTIONS = ['JAVASCRIPT', 'TYPESCRIPT', 'JAVA', 'PYTHON'] as const;
 
 type Props = {
     open: boolean;
@@ -111,6 +114,41 @@ export function AdminDialog({
                                     }))
                                 }
                             />
+                            <Stack spacing={1}>
+                                <FormControlLabel
+                                    label="Schlagwörter"
+                                    control={<span />}
+                                    sx={{ pointerEvents: 'none', userSelect: 'none', ml: 0 }}
+                                />
+                                <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                                    {TAG_OPTIONS.map((tag) => {
+                                        const checked = form.schlagwoerter.includes(tag);
+                                        return (
+                                            <FormControlLabel
+                                                key={tag}
+                                                control={
+                                                    <Checkbox
+                                                        checked={checked}
+                                                        onChange={() =>
+                                                            onChange((prev) => {
+                                                                const exists = prev.schlagwoerter.includes(tag);
+                                                                const nextTags = exists
+                                                                    ? prev.schlagwoerter.filter((t) => t !== tag)
+                                                                    : [...prev.schlagwoerter, tag];
+                                                                return {
+                                                                    ...prev,
+                                                                    schlagwoerter: nextTags,
+                                                                };
+                                                            })
+                                                        }
+                                                    />
+                                                }
+                                                label={tag}
+                                            />
+                                        );
+                                    })}
+                                </Stack>
+                            </Stack>
                             <FormControl fullWidth>
                                 <InputLabel id="admin-art-label">Art</InputLabel>
                                 <Select
