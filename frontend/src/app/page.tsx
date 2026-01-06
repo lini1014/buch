@@ -74,6 +74,9 @@ export default function Home() {
     const handleTagToggle = (tag: keyof TagState, checked: boolean) =>
         setTags((prev) => ({ ...prev, [tag]: checked }));
 
+    const isLoading = state.status === 'loading';
+    const isSuccess = state.status === 'success';
+
     return (
         <Box
             suppressHydrationWarning
@@ -157,7 +160,7 @@ export default function Home() {
                         art={art}
                         lieferbarOnly={lieferbarOnly}
                         tags={tags}
-                        loading={state.status === 'loading'}
+                        loading={isLoading}
                         onQueryChange={setQuery}
                         onArtChange={setArt}
                         onLieferbarChange={setLieferbarOnly}
@@ -177,7 +180,7 @@ export default function Home() {
             </Box>
 
             <Stack spacing={2} sx={{ mt: 3 }}>
-                {state.status === 'loading' && (
+                {isLoading && (
                     <Stack
                         direction="row"
                         alignItems="center"
@@ -195,21 +198,21 @@ export default function Home() {
                     <Alert severity="error">{state.message}</Alert>
                 )}
 
-                {state.status === 'success' && books.length === 0 && (
+                {isSuccess && books.length === 0 && (
                     <Alert severity="info">
                         Keine Bücher gefunden. Probiere eine andere Suche.
                     </Alert>
                 )}
 
-                {state.status === 'success' && books.length > 0 && (
+                {isSuccess && books.length > 0 && (
                     <BookGrid books={books} />
                 )}
 
-                {state.status === 'success' && totalPages > 1 && (
+                {isSuccess && totalPages > 1 && (
                     <PaginationBar
                         page={page}
                         totalPages={totalPages}
-                        loading={state.status === 'loading'}
+                        loading={isLoading}
                         isLight={isLight}
                         onPrev={() => {
                             if (page > 0) {
