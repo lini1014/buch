@@ -53,13 +53,13 @@ export function AdminDialog({
             [key]: value,
         }));
         // Live-validate only a subset of fields
-        if (key === 'titel' && (isCreate || isUpdate)) {
+        if (key === 'titel' && typeof value === 'string' && (isCreate || isUpdate)) {
             setErrors((prevErr) => ({
                 ...prevErr,
                 titel: value.trim() === '' ? 'Titel ist erforderlich' : undefined,
             }));
         }
-        if (key === 'isbn' && (isCreate || isUpdate)) {
+        if (key === 'isbn' && typeof value === 'string' && (isCreate || isUpdate)) {
             setErrors((prevErr) => ({
                 ...prevErr,
                 isbn: value.trim() === '' ? 'ISBN ist erforderlich' : undefined,

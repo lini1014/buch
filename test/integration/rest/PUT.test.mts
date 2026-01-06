@@ -66,17 +66,6 @@ const geaendertesBuchIdNichtVorhanden: Omit<
 };
 const idNichtVorhanden = '999999';
 
-const geaendertesBuchInvalid: Record<string, unknown> = {
-    isbn: 'falsche-ISBN',
-    rating: -1,
-    art: 'UNSICHTBAR',
-    preis: -1,
-    rabatt: 2,
-    lieferbar: true,
-    datum: '12345-123-123',
-    homepage: 'anyHomepage',
-};
-
 const veraltesBuch: BuchDtoOhneRef = {
     isbn: '978-0-007-09732-6',
     rating: 1,
