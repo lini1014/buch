@@ -7,9 +7,10 @@ import {
   FormLabel,
   InputLabel,
   MenuItem,
+  Radio,
+  RadioGroup,
   Select,
   Stack,
-  Switch,
   TextField,
 } from '@mui/material';
 import type { TagState } from '../lib/useBookSearch';
@@ -80,14 +81,18 @@ export function SearchForm({
                 </FormControl>
 
                 <FormControlLabel
-                    control={
-                        <Switch
-                            checked={Boolean(lieferbarOnly)}
-                            onChange={(event) => onLieferbarChange(event.target.checked)}
-                        />
-                    }
-                    label="Nur lieferbar"
+                    label="Verfügbarkeit"
+                    control={<span />}
+                    sx={{ pointerEvents: 'none', userSelect: 'none', ml: 0 }}
                 />
+                <RadioGroup
+                    row
+                    value={lieferbarOnly ? 'lieferbar' : 'alle'}
+                    onChange={(event) => onLieferbarChange(event.target.value === 'lieferbar')}
+                >
+                    <FormControlLabel value="alle" control={<Radio />} label="Alle Bücher" />
+                    <FormControlLabel value="lieferbar" control={<Radio />} label="Nur lieferbare" />
+                </RadioGroup>
 
                 <FormControl component="fieldset">
                     <FormLabel component="legend">Technologien</FormLabel>
