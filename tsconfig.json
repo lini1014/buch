@@ -7,6 +7,7 @@
   // NICHT "strictest" wegen "experimentalDecorators"
   "extends": ["@tsconfig/strictest/tsconfig", "@tsconfig/node24/tsconfig"],
   "include": ["src/**/*", "test/**/*"],
+  "exclude": ["frontend", "frontend/**"],
   "compilerOptions": {
     // "node20" impliziert "ES2024" fuer "target", ab TypeScript 5.9
     // uebersetzter JS-Code im Hinblick auf Module. "nodenext" erfordert dasselbe fuer "moduleResolution"
