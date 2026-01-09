@@ -4,6 +4,7 @@ import {
     Alert,
     Box,
     CircularProgress,
+    Portal,
     Stack,
     Typography,
 } from '@mui/material';
@@ -38,7 +39,7 @@ export default function Home() {
         totalPages,
         loadBooks,
         resetFilters,
-    } = useBookSearch(token, isAuthenticated);
+    } = useBookSearch(token);
 
     const {
         adminForm,
@@ -90,19 +91,24 @@ export default function Home() {
                 transition: 'background-color 0.3s ease',
             }}
         >
-            {isAuthenticated && (
-                <UserMenu username={username} onLogout={logout} />
-            )}
+            <UserMenu
+                isAuthenticated={isAuthenticated}
+                username={username}
+                onLogout={logout}
+            />
 
-            <Box
-                sx={{
-                    position: 'absolute',
-                    bottom: 16,
-                    left: 16,
-                }}
-            >
-                <ThemeToggle isLight={isLight} onToggle={setIsLight} />
-            </Box>
+            <Portal>
+                <Box
+                    sx={{
+                        position: 'fixed',
+                        bottom: 16,
+                        left: 16,
+                        zIndex: (theme) => theme.zIndex.modal + 1,
+                    }}
+                >
+                    <ThemeToggle isLight={isLight} onToggle={setIsLight} />
+                </Box>
+            </Portal>
 
             <Box
                 sx={{
@@ -136,39 +142,19 @@ export default function Home() {
                     transition: 'background-color 0.3s ease',
                 }}
             >
-                {!isAuthenticated && (
-                    <Alert
-                        severity="info"
-                        action={
-                            <Typography
-                                component="a"
-                                href="/login"
-                                sx={{ color: 'inherit', textDecoration: 'none' }}
-                            >
-                                Anmelden
-                            </Typography>
-                        }
-                        sx={{ mb: 2 }}
-                    >
-                        Bitte melde dich an, um Bücher zu laden.
-                    </Alert>
-                )}
-
-                {isAuthenticated && (
-                    <SearchForm
-                        query={query}
-                        art={art}
-                        lieferbarOnly={lieferbarOnly}
-                        tags={tags}
-                        loading={isLoading}
-                        onQueryChange={setQuery}
-                        onArtChange={setArt}
-                        onLieferbarChange={setLieferbarOnly}
-                        onTagToggle={handleTagToggle}
-                        onReset={handleReset}
-                        onSearch={handleSearch}
-                    />
-                )}
+                <SearchForm
+                    query={query}
+                    art={art}
+                    lieferbarOnly={lieferbarOnly}
+                    tags={tags}
+                    loading={isLoading}
+                    onQueryChange={setQuery}
+                    onArtChange={setArt}
+                    onLieferbarChange={setLieferbarOnly}
+                    onTagToggle={handleTagToggle}
+                    onReset={handleReset}
+                    onSearch={handleSearch}
+                />
 
                 {isAuthenticated && isAdmin && (
                     <AdminActions

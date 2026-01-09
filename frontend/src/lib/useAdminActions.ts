@@ -128,9 +128,9 @@ export function useAdminActions(token: string | undefined, loadBooks: () => Prom
     const handleDelete = useCallback(async () => {
         setAdminError(undefined);
         setAdminInfo(undefined);
-        const idNum = Number(adminForm.id);
-        if (!Number.isInteger(idNum)) {
-            setAdminError('Gültige ID für Löschung angeben.');
+        const isbnValue = adminForm.isbn.trim();
+        if (isbnValue.length === 0) {
+            setAdminError('ISBN für Löschung angeben.');
             return;
         }
         if (!token) {
@@ -138,13 +138,13 @@ export function useAdminActions(token: string | undefined, loadBooks: () => Prom
             return;
         }
         try {
-            await bookApi.remove(idNum, token);
-            setAdminInfo(`Buch ${idNum} gelöscht.`);
+            await bookApi.removeByIsbn(isbnValue, token);
+            setAdminInfo(`Buch ${isbnValue} gelöscht.`);
             await loadBooks();
         } catch (err) {
             setAdminError(err instanceof Error ? err.message : 'Löschen fehlgeschlagen');
         }
-    }, [adminForm.id, loadBooks, token]);
+    }, [adminForm.isbn, loadBooks, token]);
 
     const resetMessages = useCallback(() => {
         setAdminError(undefined);

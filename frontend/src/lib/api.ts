@@ -121,4 +121,11 @@ export const bookApi = {
             token,
         });
     },
+    removeByIsbn: async (isbn: string, token?: string) => {
+        const url = buildUrl(`/rest/isbn/${encodeURIComponent(isbn)}`);
+        return request<void>(url, {
+            method: 'DELETE',
+            token,
+        });
+    },
 };

@@ -1,14 +1,16 @@
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
 import { Box, Button, IconButton, Menu, Typography } from '@mui/material';
+import Link from 'next/link';
 import { useState } from 'react';
 
 type Props = {
+    isAuthenticated: boolean;
     username?: string | null;
-    onLogout: () => void;
+    onLogout?: () => void;
 };
 
-export function UserMenu({ username, onLogout }: Props) {
+export function UserMenu({ isAuthenticated, username, onLogout }: Props) {
     const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
 
     return (
@@ -40,20 +42,32 @@ export function UserMenu({ username, onLogout }: Props) {
                 <Box sx={{ px: 2, py: 1.5, display: 'flex', alignItems: 'center', gap: 1 }}>
                     <PersonOutlineRoundedIcon />
                     <Typography variant="body1" sx={{ fontWeight: 600 }}>
-                        {username ?? 'Unbekannt'}
+                        {isAuthenticated ? username ?? 'Unbekannt' : 'Gast'}
                     </Typography>
                 </Box>
 
-                <Button
-                    fullWidth
-                    onClick={() => {
-                        setMenuAnchor(null);
-                        onLogout();
-                    }}
-                    sx={{ justifyContent: 'flex-start', color: '#f5f5f5', px: 2 }}
-                >
-                    Log-out
-                </Button>
+                {isAuthenticated ? (
+                    <Button
+                        fullWidth
+                        onClick={() => {
+                            setMenuAnchor(null);
+                            onLogout?.();
+                        }}
+                        sx={{ justifyContent: 'flex-start', color: '#f5f5f5', px: 2 }}
+                    >
+                        Log-out
+                    </Button>
+                ) : (
+                    <Button
+                        fullWidth
+                        component={Link}
+                        href="/login"
+                        onClick={() => setMenuAnchor(null)}
+                        sx={{ justifyContent: 'flex-start', color: '#f5f5f5', px: 2 }}
+                    >
+                        Login
+                    </Button>
+                )}
             </Menu>
         </>
     );

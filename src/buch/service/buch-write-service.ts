@@ -241,6 +241,31 @@ export class BuchWriteService {
         return true;
     }
 
+    /**
+     * Ein Buch wird asynchron anhand seiner ISBN gelöscht.
+     *
+     * @param isbn ISBN des zu löschenden Buches
+     * @returns true, falls das Buch vorhanden war und gelöscht wurde. Sonst false.
+     */
+    async deleteByIsbn(isbn: string) {
+        this.#logger.debug('deleteByIsbn: isbn=%s', isbn);
+
+        const buch = await this.#prisma.buch.findUnique({
+            where: { isbn },
+        });
+        if (buch === null) {
+            this.#logger.debug('deleteByIsbn: not found');
+            return false;
+        }
+
+        await this.#prisma.$transaction(async (tx) => {
+            await tx.buch.delete({ where: { isbn } });
+        });
+
+        this.#logger.debug('deleteByIsbn');
+        return true;
+    }
+
     async #validateCreate({
         isbn,
     }: Prisma.BuchCreateInput): Promise<undefined> {

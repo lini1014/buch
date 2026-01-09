@@ -303,6 +303,29 @@ export class BuchWriteController {
         await this.#service.delete(id);
     }
 
+    /**
+     * Ein Buch wird anhand seiner ISBN gelöscht.
+     *
+     * @param isbn ISBN des Buches
+     * @returns Leeres Promise-Objekt.
+     */
+    @Delete('isbn/:isbn')
+    @Roles('admin')
+    @HttpCode(HttpStatus.NO_CONTENT)
+    @ApiOperation({ summary: 'Buch mit der ISBN löschen' })
+    @ApiParam({
+        name: 'isbn',
+        description: 'z.B. 978-3-86680-192-9',
+    })
+    @ApiNoContentResponse({
+        description: 'Das Buch wurde gelöscht oder war nicht vorhanden',
+    })
+    @ApiForbiddenResponse({ description: MSG_FORBIDDEN })
+    async deleteByIsbn(@Param('isbn') isbn: string) {
+        this.#logger.debug('deleteByIsbn: isbn=%s', isbn);
+        await this.#service.deleteByIsbn(isbn);
+    }
+
     #buchDtoToBuchCreateInput(buchDTO: BuchDTO): BuchCreate {
         const abbildungen = buchDTO.abbildungen?.map((abbildungDTO) => {
             const abbildung = {

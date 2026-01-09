@@ -22,7 +22,7 @@ const DEFAULT_TAGS: TagState = {
     python: false,
 };
 
-export function useBookSearch(token: string | undefined, isAuthenticated: boolean) {
+export function useBookSearch(token: string | undefined) {
     const [query, setQuery] = useState('');
     const [lieferbarOnly, setLieferbarOnly] = useState(false);
     const [art, setArt] = useState<string | undefined>(undefined);
@@ -31,10 +31,6 @@ export function useBookSearch(token: string | undefined, isAuthenticated: boolea
     const [state, setState] = useState<FetchState>({ status: 'idle' });
 
     const loadBooks = useCallback(async () => {
-        if (!token) {
-            setState({ status: 'idle' });
-            return;
-        }
         setState({ status: 'loading' });
         try {
             const data = await bookApi.list(
@@ -62,10 +58,8 @@ export function useBookSearch(token: string | undefined, isAuthenticated: boolea
     }, [art, lieferbarOnly, page, query, tags.java, tags.javascript, tags.python, tags.typescript, token]);
 
     useEffect(() => {
-        if (isAuthenticated && token) {
-            void loadBooks();
-        }
-    }, [isAuthenticated, loadBooks, token]);
+        void loadBooks();
+    }, [loadBooks]);
 
     const books = useMemo(() => {
         if (state.status !== 'success') {

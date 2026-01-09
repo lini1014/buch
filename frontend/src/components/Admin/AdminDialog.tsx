@@ -59,13 +59,20 @@ export function AdminDialog({
                 titel: value.trim() === '' ? 'Titel ist erforderlich' : undefined,
             }));
         }
-        if (key === 'isbn' && typeof value === 'string' && (isCreate || isUpdate)) {
+        if (
+            key === 'isbn' &&
+            typeof value === 'string' &&
+            (isCreate || isDelete)
+        ) {
             setErrors((prevErr) => ({
                 ...prevErr,
-                isbn: value.trim() === '' ? 'ISBN ist erforderlich' : undefined,
+                isbn:
+                    value.trim() === ''
+                        ? 'ISBN ist erforderlich'
+                        : undefined,
             }));
         }
-        if (key === 'id' && (isUpdate || isDelete)) {
+        if (key === 'id' && isUpdate) {
             const idNum = Number(value);
             setErrors((prevErr) => ({
                 ...prevErr,
@@ -80,19 +87,21 @@ export function AdminDialog({
     const validate = () => {
         const nextErrors: FieldError = {};
 
-        if (isUpdate || isDelete) {
+        if (isUpdate) {
             const idNum = Number(form.id);
             if (!Number.isInteger(idNum) || idNum <= 0) {
                 nextErrors.id = 'Gültige ID angeben';
+            }
+        }
+        if (isDelete) {
+            if (form.isbn.trim() === '') {
+                nextErrors.isbn = 'ISBN ist erforderlich';
             }
         }
 
         if (isCreate || isUpdate) {
             if (form.titel.trim() === '') {
                 nextErrors.titel = 'Titel ist erforderlich';
-            }
-            if (form.isbn.trim() === '') {
-                nextErrors.isbn = 'ISBN ist erforderlich';
             }
             if (form.rating.trim() !== '') {
                 const ratingNum = Number(form.rating);
@@ -106,6 +115,9 @@ export function AdminDialog({
                     nextErrors.preis = 'Preis muss eine Zahl >= 0 sein';
                 }
             }
+        }
+        if (isCreate && form.isbn.trim() === '') {
+            nextErrors.isbn = 'ISBN ist erforderlich';
         }
 
         setErrors(nextErrors);
@@ -127,13 +139,22 @@ export function AdminDialog({
             </DialogTitle>
             <DialogContent dividers>
                 <Stack spacing={2} sx={{ mt: 1 }}>
-                    {(isUpdate || isDelete) && (
+                    {isUpdate && (
                         <TextField
                             label="ID"
                             value={form.id}
                             error={Boolean(errors.id)}
                             helperText={errors.id}
                             onChange={(e) => setField('id', e.target.value)}
+                        />
+                    )}
+                    {isDelete && (
+                        <TextField
+                            label="ISBN"
+                            value={form.isbn}
+                            error={Boolean(errors.isbn)}
+                            helperText={errors.isbn}
+                            onChange={(e) => setField('isbn', e.target.value)}
                         />
                     )}
                     {(isCreate || isUpdate) && (

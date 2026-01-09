@@ -3,13 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --port 3001 --hostname 0.0.0.0",
+    "dev": "next dev --port 3001 --hostname localhost --experimental-https --experimental-https-key ../src/config/resources/tls/key.pem --experimental-https-cert ../src/config/resources/tls/certificate.crt",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
     "test:e2e": "playwright test"
   },
   "dependencies": {
+    "@emotion/cache": "11.14.0",
     "@emotion/react": "11.14.0",
     "@emotion/styled": "11.14.1",
     "@mui/icons-material": "7.3.6",

@@ -1,6 +1,5 @@
 'use client';
 
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
 import {
     Alert,
@@ -9,6 +8,7 @@ import {
     Card,
     CardContent,
     Container,
+    Portal,
     Stack,
     TextField,
     Typography,
@@ -208,7 +208,6 @@ export default function LoginPage() {
             >
                 {[1, 2, 3, 4].map((key) => (
                     <Box
-                        // eslint-disable-next-line react/no-array-index-key
                         key={key}
                         sx={{
                             width: 32,
@@ -221,24 +220,27 @@ export default function LoginPage() {
                 ))}
             </Box>
             {/* Theme Switch */}
-            <Box
-                sx={{
-                    position: 'absolute',
-                    bottom: 16,
-                    left: 16,
-                }}
-            >
-                <FormControlLabel
-                    control={
-                        <Switch
-                            checked={isLight}
-                            onChange={(e) => setIsLight(e.target.checked)}
-                        />
-                    }
-                    label={isLight ? 'Light' : 'Dark'}
-                    sx={{ color: isLight ? '#333' : '#c7c7c7' }}
-                />
-            </Box>
+            <Portal>
+                <Box
+                    sx={{
+                        position: 'fixed',
+                        bottom: 16,
+                        left: 16,
+                        zIndex: (theme) => theme.zIndex.modal + 1,
+                    }}
+                >
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                checked={isLight}
+                                onChange={(e) => setIsLight(e.target.checked)}
+                            />
+                        }
+                        label={isLight ? 'Light' : 'Dark'}
+                        sx={{ color: isLight ? '#333' : '#c7c7c7' }}
+                    />
+                </Box>
+            </Portal>
         </Box>
     );
 }
